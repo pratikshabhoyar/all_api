@@ -1,5 +1,5 @@
 //const db = require('./models/db');
-const db=require('../models/db');
+const db=require('../config/db');
 
 const findUserByMobile = async (mobileNumber, countryCode) => {
   const query = 'SELECT * FROM user WHERE mobileNumber = ? AND countryCode = ?';

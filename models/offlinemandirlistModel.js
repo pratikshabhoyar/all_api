@@ -2,21 +2,22 @@ const mysql = require('mysql2');
 require('dotenv').config();
 const OfflinemandirlistController = require('../controllers/offlinemandirlistController');
 // MySQL connection
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database: 'add_mandir',
-  });
+// const db = mysql.createConnection({
+//     host: 'localhost',
+//     user: 'root',
+//     password: 'root',
+//     database: 'add_mandir',
+//   });
   
-  db.connect((err) => {
-    if (err) {
-      console.error('Error connecting to the database:', err);
-      process.exit(1);
-    }
-    console.log('Connected to the database.');
-  });
-  module.exports=db;
+//   db.connect((err) => {
+//     if (err) {
+//       console.error('Error connecting to the database:', err);
+//       process.exit(1);
+//     }
+//     console.log('Connected to the database.');
+//   });
+//   module.exports=db;
+const db = require("../config/db");
   // Fetch the mandir list with status offline
 const getOfflineMandirs = (callback) => {
     const query = `

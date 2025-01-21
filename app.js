@@ -9,7 +9,7 @@ const eventRoutes = require("./routes/eventRoutes");
 const bookRoutes = require("./routes/bookRoutes");
 const suvicharRoutes = require("./routes/suvicharRoutes");
 const userRoutes = require("./routes/userRoutes");
-const horoscopeRoutes = require('./routes/dailyhoroscopeRoutes');
+//const horoscopeRoutes = require('./routes/dailyhoroscopeRoutes');
 const mandirlistRoutes = require('./routes/mandirlistRoutes'); // Path to your routes
 const userlistRoutes = require('./routes/userlistRoutes');
 const eventlistRoutes = require('./routes/eventlistRoutes');
@@ -23,7 +23,8 @@ const { getNotificationSettings, updateNotificationSettings } = require('./model
 const avatarRoutes = require("./routes/avatarRoutes");
 const templeRoutes = require('./routes/templeRoutes');
 const fetchmandirRoutes = require('./routes/fetchmandirRoutes');
-const db = require('./models/db');
+// const db = require('./models/db');
+const db=require('./config/db');
 const app = express();
 
 // Middleware for CORS
@@ -49,7 +50,7 @@ app.use("/api/events", eventRoutes);
 app.use("/api/books", bookRoutes);
 app.use("/api/suvichar", suvicharRoutes); // Add suvichar routes
 app.use("/api/users", userRoutes);
-app.use('/api/horoscope', horoscopeRoutes);
+//app.use('/api/horoscope', horoscopeRoutes);
 // Routes
 app.use('/api/auth',authRoutesNotification);
 app.use("/api/avatar", avatarRoutes);
@@ -74,13 +75,13 @@ app.use('/api/auth',authRoutes);
 app.use('api/auth',signupRoutes);
 app.use('/api', fetchmandirRoutes);
 // Test database connection
-db.connect((err) => {
-  if (err) {
-    console.error('Database connection failed:', err.stack);
-    return;
-  }
-  console.log('Connected to database.');
-});
+// db.connect((err) => {
+//   if (err) {
+//     console.error('Database connection failed:', err.stack);
+//     return;
+//   }
+//   console.log('Connected to database.');
+// });
 
 // console.log(__dirname);
 console.log(require.resolve('./routes/mandirRoutes'));

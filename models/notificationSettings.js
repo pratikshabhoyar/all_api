@@ -2,22 +2,22 @@ const mysql = require('mysql2');
 const router = require('../routes/notificationSettingsRoutes');
 const notificationSettingsController = require('../controllers/notificationSettingsController');
 // Database connection setup
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'root',
-  database: 'user_db',
-});
+// const db = mysql.createConnection({
+//   host: 'localhost',
+//   user: 'root',
+//   password: 'root',
+//   database: 'user_db',
+// });
 
-// Log a message when connected
-db.connect((err) => {
-  if (err) {
-    console.error('Error connecting to MySQL database:', err);
-    throw err;
-  }
-  console.log('Connected to MySQL database!');
-});
-
+// // Log a message when connected
+// db.connect((err) => {
+//   if (err) {
+//     console.error('Error connecting to MySQL database:', err);
+//     throw err;
+//   }
+//   console.log('Connected to MySQL database!');
+// });
+const db = require("../config/db");
 // Function to fetch notification settings for a user
 const getNotificationSettings = (userId) => {
   return new Promise((resolve, reject) => {
@@ -79,7 +79,7 @@ const updateNotificationSettings = (userId, settings) => {
 };
 
 module.exports = {
-  db, // Export the database connection
+  
   getNotificationSettings,
   updateNotificationSettings,
 };

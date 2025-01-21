@@ -1,22 +1,23 @@
 const mysql = require('mysql2');
 const signupController = require('../controllers/signupController');
 require('dotenv').config();
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'root',
-  database: 'user_db',
-});
+// const db = mysql.createConnection({
+//   host: 'localhost',
+//   user: 'root',
+//   password: 'root',
+//   database: 'user_db',
+// });
 
-db.connect((err) => {
-  if (err) {
-    console.error('Error connecting to the database:', err.message);
-    process.exit(1);
-  }
-  console.log('Connected to the database.');
-});
+// db.connect((err) => {
+//   if (err) {
+//     console.error('Error connecting to the database:', err.message);
+//     process.exit(1);
+//   }
+//   console.log('Connected to the database.');
+// });
 
-module.exports =db.promise();
+// module.exports =db.promise();
+const db = require("../config/db");
 // Create user in the database
 const createUser = async (userDetails) => {
   try {
