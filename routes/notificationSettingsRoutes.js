@@ -1,7 +1,8 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const notificationSettingsController = require('../controllers/notificationSettingsController');
-router.get('/',notificationSettingsController.getSettings);
-router.put('/', notificationSettingsController.updateSettings);
+const { toggleNotificationSetting } = require("../controllers/notificationSettingsController");
+
+// Route for toggling notifications by user ID
+router.patch("/notifications/:id", toggleNotificationSetting);
 
 module.exports = router;

@@ -8,6 +8,9 @@ const {
   getMandirById,
   updateMandirStatus,
   getMandirCount,
+  ////////////
+  // assignMandirsToUser, getMandirsForUser ,
+
 } = require("../controllers/mandirController");
 
 // Route to get all Mandirs
@@ -28,5 +31,14 @@ router.put("/:id", updateMandir);
 router.delete("/:id", deleteMandir);
 
 router.patch("/:id/status", updateMandirStatus);
+
+//////////////////////////
+// Assign mandirs to a user
+// router.post('/users/:userId/mandirs', assignMandirsToUser);
+
+// // Get selected mandirs for a user
+// router.get('/users/:userId/mandirs', getMandirsForUser);
+
+
 
 module.exports = router;

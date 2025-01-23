@@ -9,20 +9,15 @@ const eventRoutes = require("./routes/eventRoutes");
 const bookRoutes = require("./routes/bookRoutes");
 const suvicharRoutes = require("./routes/suvicharRoutes");
 const userRoutes = require("./routes/userRoutes");
-//const horoscopeRoutes = require('./routes/dailyhoroscopeRoutes');
-const mandirlistRoutes = require('./routes/mandirlistRoutes'); // Path to your routes
-const userlistRoutes = require('./routes/userlistRoutes');
-const eventlistRoutes = require('./routes/eventlistRoutes');
-const booklistRoutes = require('./routes/booklistRoutes');
-const offlinemandirRoutes = require('./routes/offlinemandirlistRoutes');
+
 const authRoutes = require('./routes/authRoutes');
 const signupRoutes = require('./routes/signupRoutes');
-const authRoutesNotification = require('./routes/notificationSettingsRoutes');
-const db_notification = require('./models/notificationSettings');
-const { getNotificationSettings, updateNotificationSettings } = require('./models/notificationSettings');
+const notificationRoutes = require("./routes/notificationSettingsRoutes");
+//const db_notification = require('./models/notificationSettings');
+
 const avatarRoutes = require("./routes/avatarRoutes");
-const templeRoutes = require('./routes/templeRoutes');
-const fetchmandirRoutes = require('./routes/fetchmandirRoutes');
+
+
 // const db = require('./models/db');
 const db=require('./config/db');
 const app = express();
@@ -52,28 +47,15 @@ app.use("/api/suvichar", suvicharRoutes); // Add suvichar routes
 app.use("/api/users", userRoutes);
 //app.use('/api/horoscope', horoscopeRoutes);
 // Routes
-app.use('/api/auth',authRoutesNotification);
-app.use("/api/avatar", avatarRoutes);
-app.use('/api', templeRoutes);
 
-// //mandirlist Routes
-// app.use('/api', mandirlistRoutes); // API base URL
-// // // userlist routes
-// app.use('/api', userlistRoutes);
-// //eventlist routes
-// app.use('/api', eventlistRoutes);
-// //booklist routes
-// app.use('/api', booklistRoutes);
-// //offlinemandirlist routes
-// app.use('/api', offlinemandirRoutes);
-app.use('/api/mandirlist', mandirlistRoutes);
-app.use('/api/userlist', userlistRoutes);
-app.use('/api/eventlist', eventlistRoutes);
-app.use('/api/booklist', booklistRoutes);
-app.use('/api/offlinemandirlist', offlinemandirRoutes);
+app.use("/api/avatar", avatarRoutes);
+
+
+app.use("/api", notificationRoutes);
+//app.use('/api/offlinemandirlist', offlinemandirRoutes);
 app.use('/api/auth',authRoutes);
-app.use('api/auth',signupRoutes);
-app.use('/api', fetchmandirRoutes);
+app.use('/api/auth',signupRoutes);
+
 // Test database connection
 // db.connect((err) => {
 //   if (err) {

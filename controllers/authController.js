@@ -1,7 +1,7 @@
 //login flow
 const otpService = require('../services/otpService');
 const userService = require('../services/userService');
-
+const pool = require("../config/db");
 const loginWithOTP = async (req, res) => {
   const { mobileNumber, countryCode } = req.body;
   //res.send('Login endpoint works');

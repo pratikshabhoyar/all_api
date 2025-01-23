@@ -1,33 +1,33 @@
-const notificationSettingsService = require('../models/notificationSettings');
+const { getUserById, updateNotificationSetting } = require("../models/userModel");
 
-const getSettings = async (req, res) => {
+// Toggle notification setting for a user
+const toggleNotificationSetting = async (req, res) => {
+  const { id } = req.params;
+
   try {
-    const userId = req.user.id; // Assuming you have user authentication middleware
+    // Fetch user by ID
+    const user = await getUserById(id);
 
-    const settings = await notificationSettingsService.getNotificationSettings(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
 
-    res.status(200).json(settings);
+    // Toggle the notifications_enabled value (or status field if using it)
+    const newSetting = user.notifications_enabled ? false : true;
+
+    // Update the setting in the database
+    await updateNotificationSetting(id, newSetting);
+
+    res.status(200).json({
+      message: `Notifications ${newSetting ? "enabled" : "disabled"} for user with ID: ${id}.`,
+      notifications_enabled: newSetting,
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to get notification settings' });
-  }
-};
-
-const updateSettings = async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const settings = req.body; // Expected format: { mandir_arti: boolean, suvichar: boolean, new_event: boolean, other_notifications: boolean }
-
-    await notificationSettingsService.updateNotificationSettings(userId, settings);
-
-    res.status(200).json({ message: 'Notification settings updated successfully' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to update notification settings' });
+    console.error("Error toggling notification setting:", error);
+    res.status(500).json({ error: "Internal server error", message: error.message });
   }
 };
 
 module.exports = {
-  getSettings,
-  updateSettings,
+  toggleNotificationSetting,
 };
