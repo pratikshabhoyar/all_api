@@ -1,7 +1,11 @@
 const mandirModel = require("../models/mandirModel"); // Import model
 const { saveBase64File } = require("../config/saveBase64File");
 //////
-// const userModel = require('../models/userModel');
+const {
+  getSelectedMandirsByUserId,
+  updateSelectedMandirsByUserId,
+  getMandirDetails,
+} = require('../models/userModel');
 const pool = require("../config/db");
 // Add Mandir
 const addMandir = async (req, res) => {
@@ -203,37 +207,58 @@ const getMandirCount = async (req, res) => {
 
 
 // ///////////////////////////
-// // Assign selected mandirs to a user
-// const assignMandirsToUser = async (req, res) => {
-//   const userId = req.params.userId;
-//   const { selectedMandirs } = req.body;
+// Fetch selected mandirs for a user
+const getSelectedMandirs = async (req, res) => {
+  const { userId } = req.params;
 
-//   // if (!selectedMandirs || !Array.isArray(selectedMandirs)) {
-//   //   return res.status(400).json({ success: false, message: 'Invalid mandir selection' });
-//   // }
+  try {
+    // Fetch selected mandir IDs
+    const selectedMandirIds = await getSelectedMandirsByUserId(userId);
 
-//   try {
-//     await userModel.updateSelectedMandirs(userId, selectedMandirs);
-//     res.status(200).json({ success: true, message: 'Mandir selection updated successfully' });
-//   } catch (error) {
-//     console.error('Error assigning mandirs to user:', error.message);
-//     res.status(500).json({ success: false, message: 'Internal Server Error', error: error.message });
-//   }
-// };
+    // If no selected mandirs, return an empty array
+    if (!Array.isArray(selectedMandirIds) || selectedMandirIds.length === 0) {
+      return res.status(200).json({
+        user_id: userId,
+        selected_mandirs: [],
+      });
+    }
 
-// // Get selected mandirs for a user
-// const getMandirsForUser = async (req, res) => {
-//   const userId = req.params.userId;
+    // Fetch mandir details
+    const mandirDetails = await getMandirDetails(selectedMandirIds);
 
-//   try {
-//     const mandirs = await userModel.getSelectedMandirsByUserId(userId);
-//     res.status(200).json({ success: true, data: mandirs });
-//   } catch (error) {
-//     console.error('Error fetching mandirs for user:', error.message);
-//     res.status(500).json({ success: false, message: 'Internal Server Error', error: error.message });
-//   }
-// };
-// Get selected mandir list by user ID
+    res.status(200).json({
+      user_id: userId,
+      selected_mandirs: mandirDetails,
+    });
+  } catch (error) {
+    console.error("Error fetching selected mandirs:", error);
+    res.status(500).json({ error: "Internal Server Error", message: error.message });
+  }
+};
+
+
+// Update selected mandirs for a user
+const updateSelectedMandirs = async (req, res) => {
+  const { userId } = req.params;
+  const { mandirIds } = req.body;
+
+  if (!Array.isArray(mandirIds)) {
+    return res.status(400).json({ error: "Invalid format. Expected an array of mandir IDs." });
+  }
+
+  try {
+    // Update selected mandir IDs in the User table
+    await updateSelectedMandirsByUserId(userId, mandirIds);
+    res.status(200).json({
+      message: "Selected mandirs updated successfully.",
+      user_id: userId,
+      selected_mandirs: mandirIds,
+    });
+  } catch (error) {
+    console.error("Error updating selected mandirs:", error);
+    res.status(500).json({ error: "Internal Server Error", message: error.message });
+  }
+};
 
 
 module.exports = {
@@ -245,6 +270,7 @@ module.exports = {
   updateMandirStatus,
   getMandirCount,
   /////////////
-  // assignMandirsToUser, getMandirsForUser,
+  getSelectedMandirs,
+  updateSelectedMandirs,
  
 };

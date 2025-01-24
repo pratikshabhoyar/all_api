@@ -88,6 +88,33 @@ const updateUser = async (req, res) => {
   }
 };
 
+// ////////////////////////////////
+// // Update selected mandirs for a user
+// const updateSelectedMandirs = (userId, selectedMandirs) => {
+//   return new Promise((resolve, reject) => {
+//     const query = `UPDATE users SET selected_mandirs = ? WHERE id = ?`;
+//     db.query(query, [selectedMandirs.join(','), userId], (err, result) => {
+//       if (err) return reject(err);
+//       resolve(result);
+//     });
+//   });
+// };
+
+// // Fetch selected mandirs for a user
+// const getSelectedMandirsByUserId = (userId) => {
+//   return new Promise((resolve, reject) => {
+//     const query = `
+//       SELECT m.id, m.title, m.description, m.images
+//       FROM users u
+//       JOIN mandir m ON FIND_IN_SET(m.id, u.selected_mandirs)
+//       WHERE u.id = ?;
+//     `;
+//     db.query(query, [userId], (err, results) => {
+//       if (err) return reject(err);
+//       resolve(results);
+//     });
+//   });
+// };
 
 
 
@@ -97,4 +124,6 @@ module.exports = {
   updateUserStatus,
   getUsersCount,
   updateUser,
+  /////////////
+  //updateSelectedMandirs, getSelectedMandirsByUserId,
 };

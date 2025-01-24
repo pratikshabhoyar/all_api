@@ -45,32 +45,40 @@ const updateNotificationSetting = async (id, notifications_enabled) => {
 };
 
 ///////////////////////////////////////
-// // Update selected mandirs for a user
-// const updateSelectedMandirs = (userId, selectedMandirs) => {
-//   return new Promise((resolve, reject) => {
-//     const query = `UPDATE users SET selected_mandirs = ? WHERE id = ?`;
-//     pool.query(query, [selectedMandirs.join(','), userId], (err, result) => {
-//       if (err) return reject(err);
-//       resolve(result);
-//     });
-//   });
-// };
+// Fetch selected mandir IDs for a user
+const getSelectedMandirsByUserId = async (userId) => {
+  const [rows] = await pool.execute("SELECT selected_mandirs FROM Users WHERE id = ?", [userId]);
+  if (!rows.length || !rows[0]?.selected_mandirs) {
+    return []; // Return an empty array if no data
+  }
 
-// // Fetch selected mandirs for a user
-// const getSelectedMandirsByUserId = (userId) => {
-//   return new Promise((resolve, reject) => {
-//     const query = `
-//       SELECT m.id, m.title, m.location
-//       FROM users u
-//       JOIN mandir m ON FIND_IN_SET(m.id, u.selected_mandirs)
-//       WHERE u.id = ?;
-//     `;
-//     pool.query(query, [userId], (err, results) => {
-//       if (err) return reject(err);
-//       resolve(results);
-//     });
-//   });
-// };
+  try {
+    return JSON.parse(rows[0].selected_mandirs) || [];
+  } catch (error) {
+    console.error("Error parsing selected_mandirs:", error);
+    return []; // Return an empty array in case of invalid JSON
+  }
+};
+
+// Update selected mandir IDs for a user
+const updateSelectedMandirsByUserId = async (userId, mandirIds) => {
+  const serializedMandirs = JSON.stringify(mandirIds);
+  const [result] = await pool.execute(
+    "UPDATE Users SET selected_mandirs = ? WHERE id = ?",
+    [serializedMandirs, userId]
+  );
+  return result;
+};
+
+// Fetch mandir details from the Mandir table by mandir IDs
+const getMandirDetails = async (mandirIds) => {
+  if (!Array.isArray(mandirIds) || mandirIds.length === 0) {
+    return []; // Return an empty array if input is invalid
+  }
+  const placeholders = mandirIds.map(() => "?").join(",");
+  const [rows] = await pool.execute(`SELECT * FROM Mandir WHERE id IN (${placeholders})`, mandirIds);
+  return rows;
+};
 
 
 ///////////////
@@ -92,7 +100,10 @@ module.exports = {
   getUserById,
   updateNotificationSetting,
   ////
-  // updateSelectedMandirs, getSelectedMandirsByUserId,
+  getSelectedMandirsByUserId,
+  updateSelectedMandirsByUserId,
+  getMandirDetails,
+  ///
   updateUser
   
 };
