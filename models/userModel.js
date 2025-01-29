@@ -31,14 +31,14 @@ const getUsersCount = async () => {
 
 // Fetch user by ID
 const getUserById = async (id) => {
-  const [rows] = await pool.execute("SELECT * FROM Users WHERE id = ?", [id]);
+  const [rows] = await pool.execute("SELECT * FROM users WHERE id = ?", [id]);
   return rows[0];
 };
 
 // Update notification setting by ID
 const updateNotificationSetting = async (id, notifications_enabled) => {
   const [result] = await pool.execute(
-    "UPDATE Users SET notifications_enabled = ? WHERE id = ?",
+    "UPDATE users SET notifications_enabled = ? WHERE id = ?",
     [notifications_enabled, id]
   );
   return result;
@@ -47,7 +47,7 @@ const updateNotificationSetting = async (id, notifications_enabled) => {
 ///////////////////////////////////////
 // Fetch selected mandir IDs for a user
 const getSelectedMandirsByUserId = async (userId) => {
-  const [rows] = await pool.execute("SELECT selected_mandirs FROM Users WHERE id = ?", [userId]);
+  const [rows] = await pool.execute("SELECT selected_mandirs FROM users WHERE id = ?", [userId]);
   if (!rows.length || !rows[0]?.selected_mandirs) {
     return []; // Return an empty array if no data
   }
@@ -64,7 +64,7 @@ const getSelectedMandirsByUserId = async (userId) => {
 const updateSelectedMandirsByUserId = async (userId, mandirIds) => {
   const serializedMandirs = JSON.stringify(mandirIds);
   const [result] = await pool.execute(
-    "UPDATE Users SET selected_mandirs = ? WHERE id = ?",
+    "UPDATE users SET selected_mandirs = ? WHERE id = ?",
     [serializedMandirs, userId]
   );
   return result;
@@ -76,7 +76,7 @@ const getMandirDetails = async (mandirIds) => {
     return []; // Return an empty array if input is invalid
   }
   const placeholders = mandirIds.map(() => "?").join(",");
-  const [rows] = await pool.execute(`SELECT * FROM Mandir WHERE id IN (${placeholders})`, mandirIds);
+  const [rows] = await pool.execute(`SELECT * FROM mandir WHERE id IN (${placeholders})`, mandirIds);
   return rows;
 };
 

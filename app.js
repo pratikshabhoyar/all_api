@@ -16,7 +16,7 @@ const notificationRoutes = require("./routes/notificationSettingsRoutes");
 //const db_notification = require('./models/notificationSettings');
 
 const avatarRoutes = require("./routes/avatarRoutes");
-
+const userLanguageRoutes = require("./routes/userLanguageRoutes");
 
 // const db = require('./models/db');
 const db=require('./config/db');
@@ -25,7 +25,7 @@ const app = express();
 // Middleware for CORS
 app.use(
   cors({
-    origin: "http://localhost:5173", // Only allow requests from your React frontend
+    origin: "http://localhost:5000", // Only allow requests from your React frontend
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Specify allowed methods
     credentials: true, // Allow credentials (cookies, headers, etc.)
   })
@@ -55,6 +55,7 @@ app.use("/api", notificationRoutes);
 //app.use('/api/offlinemandirlist', offlinemandirRoutes);
 app.use('/api/auth',authRoutes);
 app.use('/api/auth',signupRoutes);
+app.use("/api", userLanguageRoutes);
 
 // Test database connection
 // db.connect((err) => {

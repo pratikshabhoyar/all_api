@@ -23,19 +23,46 @@ const deleteAvatarImage = async (imageId) => {
   }
 };
 
-// Get All Suvichar Images
-const getAllAvatarImages = async () => {
-  const query = `SELECT id, image_path FROM avatar`;
+// Fetch User's Selected Avatar
+const getUserAvatar = async (userId) => {
   try {
-    const [rows] = await pool.query(query);
-    return rows; // Return all suvichar images
-  } catch (err) {
-    throw new Error("Failed to fetch avatar images: " + err.message);
+    const [rows] = await db.execute(
+      "SELECT u.id AS user_id, a.id AS avatar_id, a.image_path FROM users u LEFT JOIN avatar a ON u.avatar_id = a.id WHERE u.id = ?",
+      [userId]
+    );
+    return rows.length ? rows[0] : null;
+  } catch (error) {
+    throw error;
   }
 };
+
+// Fetch All Available Avatars
+const getAllAvatars = async () => {
+  try {
+    const [rows] = await db.execute("SELECT id, image_path FROM avatar");
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Update User's Selected Avatar
+const updateUserAvatar = async (userId, avatarId) => {
+  try {
+    const [result] = await db.execute("UPDATE users SET avatar_id = ? WHERE id = ?", [avatarId, userId]);
+    return result.affectedRows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 
 module.exports = {
   addAvatarImage,
   deleteAvatarImage,
-  getAllAvatarImages,
+  getUserAvatar,
+  getAllAvatars,
+  updateUserAvatar,
+  
 };
