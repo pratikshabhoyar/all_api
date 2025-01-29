@@ -23,7 +23,7 @@ const loginWithOTP = async (req, res) => {
     const otpToken = otpService.generateOTP(mobileNumber, countryCode);
 
     // Respond with OTP token (in real scenarios, send it via SMS)
-    return res.status(200).json({ message: 'OTP sent', otpToken });
+    return res.status(200).json({ message: 'OTP sent'});
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Internal server error' });

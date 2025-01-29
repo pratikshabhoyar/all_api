@@ -32,7 +32,7 @@ const fetchAllLanguages = async (req, res) => {
 const updateUserLanguageController = async (req, res) => {
   try {
     const { userId } = req.params;
-    const { languageName } = req.body; // ✅ Ensure "languageName" is extracted correctly
+    const { languageName } = req.body;
 
     if (!languageName) {
       return res.status(400).json({ message: "Language name is required" });

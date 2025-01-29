@@ -2,23 +2,23 @@ const userModel = require('../models/signupModel');
 const otpService = require('../services/otpService');
 
 const createAccount = async (req, res) => {
-  const { name, email, country, gender, age, countryCode, mobileNumber, otpToken } = req.body;
+  const { name, email, country, gender, age, countryCode, mobileNumber} = req.body;
 
   try {
     // Check for required fields
-    if (!name || !email || !country || !gender || !age || !countryCode || !mobileNumber || !otpToken) {
+    if (!name || !email || !country || !gender || !age || !countryCode || !mobileNumber) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-    // Validate OTP (just a placeholder for actual OTP validation logic)
-    const decoded = otpService.verifyOTP(otpToken);
+    // // Validate OTP (just a placeholder for actual OTP validation logic)
+    // const decoded = otpService.verifyOTP(otpToken);
 
-    if (!decoded || decoded.mobileNumber !== mobileNumber || decoded.countryCode !== countryCode) {
-      return res.status(400).json({ message: 'Invalid OTP' });
-    }
+    // if (!decoded || decoded.mobileNumber !== mobileNumber || decoded.countryCode !== countryCode) {
+    //   return res.status(400).json({ message: 'Invalid OTP' });
+    // }
 
     // Create the user
-    const userDetails = { name, email, country, gender, age, countryCode, mobileNumber, otp: otpToken, status: 1 };
+    const userDetails = { name, email, country, gender, age, countryCode, mobileNumber, status: 1 };
     const result = await userModel.createUser(userDetails);
 
     return res.status(201).json({ message: 'User created successfully', userId: result.insertId });

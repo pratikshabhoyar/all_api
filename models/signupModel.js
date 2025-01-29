@@ -21,12 +21,12 @@ const db = require("../config/db");
 // Create user in the database
 const createUser = async (userDetails) => {
   try {
-    const { name, email, country, gender, age, countryCode, mobileNumber, otp, status } = userDetails;
+    const { name, email, country, gender, age, countryCode, mobileNumber, status } = userDetails;
     const query = `
-      INSERT INTO users (name, email, country, gender, age, country_code, mobile_number, otp, status)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+      INSERT INTO users (name, email, country, gender, age, country_code, mobile_number, status)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
     const [result] = await db.execute(query, [
-      name, email, country, gender, age, countryCode, mobileNumber, otp, status || 1
+      name, email, country, gender, age, countryCode, mobileNumber, status || 1
     ]);
     return result;
   } catch (error) {
