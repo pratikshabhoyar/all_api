@@ -23,6 +23,8 @@ const addMandir = async (req, res) => {
     map_link,
     images, // expecting base64 images
     status = 0, // Default to 0
+    city,
+    country,
   } = req.body;
 
   let imageUrls = [];
@@ -52,6 +54,8 @@ const addMandir = async (req, res) => {
       map_link,
       images: imageUrls,
       status,
+      city,
+      country,
     });
 
     res.status(201).json({ message: "Mandir added successfully", mandirId });
@@ -77,6 +81,8 @@ const updateMandir = async (req, res) => {
     aarti_time_night,
     map_link,
     images, // Expecting base64 images or existing paths
+    city,
+    country,
   } = req.body;
 
   let imageUrls = [];
@@ -118,6 +124,8 @@ const updateMandir = async (req, res) => {
       aarti_time_night,
       map_link,
       images: imageUrls,
+      city,
+      country,
     });
 
     if (!updated) {

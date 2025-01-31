@@ -5,8 +5,8 @@ const addMandir = async (mandirData) => {
     INSERT INTO mandir (
       title, nickname, description, youtube_live_link,
       offline_video_morning, offline_video_evening, offline_video_night,
-      aarti_time_morning, aarti_time_evening, aarti_time_night, map_link, images,status
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)
+      aarti_time_morning, aarti_time_evening, aarti_time_night, map_link, images,status,city,country
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?)
   `;
 
   const values = [
@@ -22,7 +22,9 @@ const addMandir = async (mandirData) => {
     mandirData.aarti_time_night,
     mandirData.map_link,
     JSON.stringify(mandirData.images), // Store image URLs as a JSON string
-    mandirData.status || 0, // Default to 0 if not provided
+    mandirData.status || 0, 
+    mandirData.city,
+    mandirData.country,// Default to 0 if not provided
   ];
 
   try {
@@ -79,7 +81,9 @@ const updateMandir = async (mandirId, mandirData) => {
       aarti_time_evening = ?, 
       aarti_time_night = ?, 
       map_link = ?,
-      status = ?
+      status = ?,
+      city = ?,
+      country = ?
 
     WHERE id = ?
   `;
@@ -98,6 +102,8 @@ const updateMandir = async (mandirId, mandirData) => {
     mandirData.aarti_time_night,
     mandirData.map_link,
     mandirData.status,
+    mandirData.city,
+    mandirData.country,
     mandirId,
   ];
 
