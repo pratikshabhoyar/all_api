@@ -48,56 +48,140 @@ const {
     }
   };
 
-  // Fetch Selected Avatar for a User
+//   // Fetch Selected Avatar for a User
+// const fetchUserAvatar = async (req, res) => {
+//   try {
+//     const { userId } = req.params;
+//     const avatar = await getUserAvatar(userId);
+
+//     if (!avatar) {
+//       return res.status(404).json({ message: "User avatar not found" });
+//     }
+
+//     res.status(200).json(avatar);
+//   } catch (error) {
+//     console.error("Error fetching user avatar:", error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// };
+// Fetch Selected Avatar for a User
 const fetchUserAvatar = async (req, res) => {
   try {
     const { userId } = req.params;
     const avatar = await getUserAvatar(userId);
 
+    // If no avatar is found for the user
     if (!avatar) {
-      return res.status(404).json({ message: "User avatar not found" });
+      return res.status(404).json({
+        error: true,
+        message: "No avatar set for the user or user not found.",
+      });
     }
 
-    res.status(200).json(avatar);
+    // If avatar is found, return it
+    res.status(200).json({
+      error: false,
+      message: "User avatar fetched successfully.",
+      avatar: avatar,
+    });
   } catch (error) {
     console.error("Error fetching user avatar:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({
+      error: true,
+      message: "Internal Server Error. Unable to fetch user avatar.",
+    });
   }
 };
 
-// Fetch All Available Avatars
+
+// // Fetch All Available Avatars
+// const fetchAllAvatars = async (req, res) => {
+//   try {
+//     const avatars = await getAllAvatars();
+//     res.status(200).json(avatars);
+//   } catch (error) {
+//     console.error("Error fetching avatars:", error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// };
 const fetchAllAvatars = async (req, res) => {
   try {
     const avatars = await getAllAvatars();
+
+    if (!avatars || avatars.length === 0) {
+      return res.status(404).json({ message: "No avatars available at the moment." });
+    }
+
     res.status(200).json(avatars);
   } catch (error) {
     console.error("Error fetching avatars:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 };
 
+
+// // Update Selected Avatar for a User
+// const updateUserAvatarController = async (req, res) => {
+//   try {
+//     const { userId } = req.params;
+//     const { avatarId } = req.body;
+
+//     if (!avatarId) {
+//       return res.status(400).json({ message: "Avatar ID is required" });
+//     }
+
+//     const affectedRows = await updateUserAvatar(userId, avatarId);
+
+//     if (affectedRows === 0) {
+//       return res.status(404).json({ message: "User not found or avatar not updated" });
+//     }
+
+//     res.status(200).json({ message: "User avatar updated successfully", avatarId });
+//   } catch (error) {
+//     console.error("Error updating user avatar:", error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// };
 // Update Selected Avatar for a User
 const updateUserAvatarController = async (req, res) => {
   try {
     const { userId } = req.params;
     const { avatarId } = req.body;
 
+    // Check if avatarId is provided in the request
     if (!avatarId) {
-      return res.status(400).json({ message: "Avatar ID is required" });
+      return res.status(400).json({
+        error: true,
+        message: "Avatar ID is required to update the avatar.",
+      });
     }
 
+    // Update the user's avatar
     const affectedRows = await updateUserAvatar(userId, avatarId);
 
+    // If no user is found or the avatar was not updated
     if (affectedRows === 0) {
-      return res.status(404).json({ message: "User not found or avatar not updated" });
+      return res.status(404).json({
+        error: true,
+        message: "User not found or avatar update failed.",
+      });
     }
 
-    res.status(200).json({ message: "User avatar updated successfully", avatarId });
+    // Successfully updated avatar
+    res.status(200).json({
+      error: false,
+      message: "User avatar updated successfully.",
+      avatarId,
+    });
   } catch (error) {
     console.error("Error updating user avatar:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({
+      error: true,
+      message: "Internal Server Error. Unable to update user avatar.",
+    });
   }
 };
+
   
   module.exports = {
     uploadAvatarImage,

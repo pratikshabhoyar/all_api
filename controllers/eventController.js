@@ -78,13 +78,36 @@ const deleteEventById = async (req, res) => {
 };
 
 // Get All Events
+// const getAllEventsList = async (req, res) => {
+//   try {
+//     const events = await eventModel.getAllEvents();
+//     res.status(200).json(events);
+//   } catch (err) {
+//     console.error("Error fetching events:", err);
+//     res.status(500).json({ error: "Failed to fetch events" });
+//   }
+// };
 const getAllEventsList = async (req, res) => {
   try {
     const events = await eventModel.getAllEvents();
-    res.status(200).json(events);
+
+    if (!events || events.length === 0) {
+      return res.status(404).json({
+        error: true,
+        message: "No events available in the database.",
+      });
+    }
+
+    res.status(200).json({
+      error: false,
+      events: events,
+    });
   } catch (err) {
     console.error("Error fetching events:", err);
-    res.status(500).json({ error: "Failed to fetch events" });
+    res.status(500).json({
+      error: true,
+      message: "Internal Server Error",
+    });
   }
 };
 

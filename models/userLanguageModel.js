@@ -1,5 +1,17 @@
 const db = require("../config/db");
 
+// // Fetch User's Selected Language
+// const getUserLanguage = async (userId) => {
+//   try {
+//     const [rows] = await db.execute(
+//       "SELECT id AS user_id, language_name FROM users WHERE id = ?",
+//       [userId]
+//     );
+//     return rows.length ? rows[0] : null;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 // Fetch User's Selected Language
 const getUserLanguage = async (userId) => {
   try {
@@ -7,11 +19,18 @@ const getUserLanguage = async (userId) => {
       "SELECT id AS user_id, language_name FROM users WHERE id = ?",
       [userId]
     );
-    return rows.length ? rows[0] : null;
+
+    // If no language is selected, return 'English' by default
+    if (rows.length === 0 || !rows[0].language_name) {
+      return { user_id: userId, language_name: "English" };
+    }
+
+    return rows[0]; // Return the selected language if available
   } catch (error) {
     throw error;
   }
 };
+
 
 // Fetch All Available Languages
 const getAllLanguages = async () => {

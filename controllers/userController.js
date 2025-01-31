@@ -1,14 +1,42 @@
 const userModel = require("../models/userModel"); // Import model
 const pool = require("../config/db");
+// const getAllUsers = async (req, res) => {
+//   try {
+//     const user = await userModel.getAllUsers();
+//     res.status(200).json(user);
+//   } catch (err) {
+//     console.error("Error fetching user:", err);
+//     res.status(500).json({ error: "Failed to fetch users." });
+//   }
+// };
 const getAllUsers = async (req, res) => {
   try {
-    const user = await userModel.getAllUsers();
-    res.status(200).json(user);
+    const users = await userModel.getAllUsers();
+
+    // If no users found, return a meaningful response
+    if (!users || users.length === 0) {
+      return res.status(404).json({
+        error: true,
+        message: "No users found.",
+      });
+    }
+
+    res.status(200).json({
+      error: false,
+      message: "Users retrieved successfully.",
+      total_users: users.length,
+      users,
+    });
   } catch (err) {
-    console.error("Error fetching user:", err);
-    res.status(500).json({ error: "Failed to fetch users." });
+    console.error("Error fetching users:", err);
+    res.status(500).json({
+      error: true,
+      message: "Internal Server Error. Unable to fetch users.",
+    });
   }
 };
+
+
 
 const updateUserStatus = async (req, res) => {
   const { id } = req.params;

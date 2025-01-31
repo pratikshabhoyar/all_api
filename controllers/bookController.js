@@ -29,15 +29,39 @@ const addNewBook = async (req, res) => {
 };
 
 // Get all books
+// const getAllBooks = async (req, res) => {
+//   try {
+//     const books = await bookModel.getAllBooks();
+//     res.status(200).json(books);
+//   } catch (error) {
+//     console.error("Error fetching books:", error);
+//     res.status(500).json({ error: "Failed to fetch books" });
+//   }
+// };
 const getAllBooks = async (req, res) => {
   try {
     const books = await bookModel.getAllBooks();
-    res.status(200).json(books);
+
+    if (!books || books.length === 0) {
+      return res.status(404).json({
+        error: true,
+        message: "No books available in the database.",
+      });
+    }
+
+    res.status(200).json({
+      error: false,
+      books: books,
+    });
   } catch (error) {
     console.error("Error fetching books:", error);
-    res.status(500).json({ error: "Failed to fetch books" });
+    res.status(500).json({
+      error: true,
+      message: "Internal Server Error",
+    });
   }
 };
+
 
 const getBooksCount = async (req, res) => {
   try {

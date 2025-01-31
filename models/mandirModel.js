@@ -6,7 +6,7 @@ const addMandir = async (mandirData) => {
       title, nickname, description, youtube_live_link,
       offline_video_morning, offline_video_evening, offline_video_night,
       aarti_time_morning, aarti_time_evening, aarti_time_night, map_link, images,status,city,country
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?)
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   const values = [
