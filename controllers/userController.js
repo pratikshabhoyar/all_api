@@ -72,12 +72,12 @@ const updateUser = async (req, res) => {
   const { name, email, country, gender, age, country_code, mobile_number } = req.body;
 
   if (!id) {
-    return res.status(400).json({ error: "User ID is required" });
+    return res.status(400).json({ error: true, message: "User ID is required" });
   }
 
   // Validate the required fields
   if (!name || !email || !country || !gender || !age || !country_code || !mobile_number) {
-    return res.status(400).json({ error: "All fields are required" });
+    return res.status(400).json({ error: true, message: "All fields are required" });
   }
 
   try {
@@ -100,7 +100,7 @@ const updateUser = async (req, res) => {
     const result = await userModel.updateUser(query, values);  // Use the async function
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "User not found or no changes made" });
+      return res.status(404).json({error: true, message: "User not found or no changes made" });
     }
 
     // Fetch updated user details to return as response (optional)

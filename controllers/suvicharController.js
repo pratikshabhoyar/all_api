@@ -10,7 +10,7 @@ const uploadSuvicharImage = async (req, res) => {
     const { image } = req.body;
 
     if (!image) {
-      return res.status(400).json({ message: "Image data is required" });
+      return res.status(400).json({ error: true, message: "Image data is required" });
     }
 
     const imagePath = saveBase64File(image, "uploads", "suvichar");
@@ -19,13 +19,14 @@ const uploadSuvicharImage = async (req, res) => {
     res
       .status(201)
       .json({
+        error: false,
         message: "Suvichar image uploaded successfully",
         id: insertId,
         imagePath,
       });
   } catch (error) {
     console.error("Error uploading Suvichar image:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({error: true, message: "Internal Server Error" ,details: error.message,});
   }
 };
 
