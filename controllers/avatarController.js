@@ -6,27 +6,65 @@ const {
   } = require("../models/avatarModel");
   const { saveBase64File } = require("../config/saveBase64File");
   
+  // const uploadAvatarImage = async (req, res) => {
+  //   try {
+  //     const { image } = req.body;
+  
+  //     if (!image) {
+  //       return res.status(400).json({ message: "Image data is required" });
+  //     }
+  
+  //     const imagePath = saveBase64File(image, "uploads", "avatar");
+  //     const insertId = await addAvatarImage(imagePath);
+  
+  //     res
+  //       .status(201)
+  //       .json({
+  //         message: "Avatar image uploaded successfully",
+  //         id: insertId,
+  //         imagePath,
+  //       });
+  //   } catch (error) {
+  //     console.error("Error uploading Avatar image:", error);
+  //     res.status(500).json({ message: "Internal Server Error" });
+  //   }
+  // };
   const uploadAvatarImage = async (req, res) => {
     try {
       const { image } = req.body;
   
+      // Validate if image data is provided
       if (!image) {
-        return res.status(400).json({ message: "Image data is required" });
+        return res.status(400).json({ error: true, message: "Image data is required" });
       }
   
-      const imagePath = saveBase64File(image, "uploads", "avatar");
+      // Attempt to save the base64 image
+      const imagePath = await saveBase64File(image, "uploads", "avatar");
+  
+      if (!imagePath) {
+        return res.status(500).json({ error: true, message: "Failed to save image" });
+      }
+  
+      // Insert image path into database
       const insertId = await addAvatarImage(imagePath);
   
-      res
-        .status(201)
-        .json({
-          message: "Avatar image uploaded successfully",
-          id: insertId,
-          imagePath,
-        });
+      if (!insertId) {
+        return res.status(500).json({ error: true, message: "Failed to save image in database" });
+      }
+  
+      res.status(201).json({
+        error: false,
+        message: "Avatar image uploaded successfully",
+        id: insertId,
+        imagePath,
+      });
     } catch (error) {
       console.error("Error uploading Avatar image:", error);
-      res.status(500).json({ message: "Internal Server Error" });
+      res.status(500).json({
+        error: true,
+        message: "Internal Server Error",
+        details: error.message,
+      });
     }
   };
   
