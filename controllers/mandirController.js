@@ -641,11 +641,12 @@ const getSelectedMandirs = async (req, res) => {
         message: "Failed to fetch mandir details or mandirs do not exist.",
       });
     }
-
+    
     return res.status(200).json({
       error: false,
       user_id: userId,
       selected_mandirs: mandirDetails.mandirs, // Return only valid mandirs
+      
     });
   } catch (error) {
     console.error("Error fetching selected mandirs:", error);

@@ -99,7 +99,7 @@ const updateUserNotificationSettings = async (req, res) => {
       return res.status(404).json({ message: "User not found or no updates made" });
     }
 
-    res.status(200).json({ message: "Notification settings updated successfully" });
+    res.status(200).json({  error: false,message: "Notification settings updated successfully" });
   } catch (error) {
     console.error("Error updating notifications:", error);
     res.status(500).json({ message: "Internal Server Error" });
