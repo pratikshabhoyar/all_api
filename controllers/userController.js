@@ -107,6 +107,7 @@ const updateUser = async (req, res) => {
     const [updatedUser] = await pool.query("SELECT * FROM users WHERE id = ?", [id]);
 
     res.status(200).json({
+      error: false,
       message: "User updated successfully",
       updatedUser: updatedUser[0], // Return updated user details
     });
