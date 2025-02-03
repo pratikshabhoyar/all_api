@@ -1,19 +1,40 @@
 //const db = require('./models/db');
 const db=require('../config/db');
 
+
+
+// Find user by mobile number and country code
 const findUserByMobile = async (mobileNumber, countryCode) => {
-  const query = 'SELECT * FROM user WHERE mobileNumber = ? AND countryCode = ?';
-  const [rows] = await db.execute(query, [mobileNumber, countryCode]);
-  return rows[0];
+  try {
+    const query = `SELECT * FROM users WHERE mobile_number = ? AND country_code = ?`;
+    const [rows] = await db.execute(query, [mobileNumber, countryCode]);
+
+    return rows.length > 0 ? rows[0] : null;
+  } catch (error) {
+    console.error("Error in findUserByMobile:", error.message);
+    throw new Error("Error finding user by mobile");
+  }
 };
 
-const createUser = async (mobileNumber, countryCode) => {
-  const query = 'INSERT INTO user (mobileNumber, countryCode) VALUES (?, ?)';
-  const [result] = await db.execute(query, [mobileNumber, countryCode]);
-  return result.insertId;
+// Create user in the database
+const createUser = async (userDetails) => {
+  try {
+    const { mobileNumber, countryCode, status } = userDetails;
+
+    const query = `
+      INSERT INTO users (mobile_number, country_code, status)
+      VALUES (?, ?, ?)`;
+
+    const [result] = await db.execute(query, [mobileNumber, countryCode, status || 1]);
+    return result;
+  } catch (error) {
+    console.error("Error in createUser:", error.message);
+    throw new Error("Error creating user");
+  }
 };
 
 module.exports = {
   findUserByMobile,
   createUser,
 };
+

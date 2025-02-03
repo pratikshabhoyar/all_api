@@ -104,6 +104,46 @@ const fetchAllLanguages = async (req, res) => {
 };
 
 // Update User's Selected Language by Name
+// const updateUserLanguageController = async (req, res) => {
+//   try {
+//     const { userId } = req.params;
+//     const { languageName } = req.body;
+
+//     if (!userId) {
+//       return res.status(400).json({ error: true, message: "User ID is required" });
+//     }
+
+//     if (!languageName) {
+//       return res.status(400).json({ error: true, message: "Language name is required" });
+//     }
+
+//     // Validate if the language exists in the database
+//     const languageExists = await checkIfLanguageExists(languageName);
+
+//     if (!languageExists) {
+//       return res.status(404).json({ error: true, message: `Language "${languageName}" not found` });
+//     }
+
+//     const affectedRows = await updateUserLanguageByName(userId, languageName);
+
+//     if (affectedRows === 0) {
+//       return res.status(404).json({ error: true, message: "User not found or language not updated" });
+//     }
+
+//     res.status(200).json({
+//       error: false,
+//       message: "User language updated successfully",
+//       languageName
+//     });
+//   } catch (error) {
+//     console.error("Error updating user language:", error);
+//     res.status(500).json({
+//       error: true,
+//       message: "Internal Server Error",
+//       details: error.message
+//     });
+//   }
+// };
 const updateUserLanguageController = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -117,8 +157,9 @@ const updateUserLanguageController = async (req, res) => {
       return res.status(400).json({ error: true, message: "Language name is required" });
     }
 
-    // Validate if the language exists in the database
-    const languageExists = await checkIfLanguageExists(languageName);
+    // Check if the language exists in the database
+    const allLanguages = await getAllLanguages();
+    const languageExists = allLanguages.includes(languageName);
 
     if (!languageExists) {
       return res.status(404).json({ error: true, message: `Language "${languageName}" not found` });
